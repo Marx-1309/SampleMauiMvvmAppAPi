@@ -119,7 +119,7 @@ app.MapPost("/login", async (LoginDto loginDto, UserManager<IdentityUser> _userM
     {
         new Claim(JwtRegisteredClaimNames.Sub, user.Id),
         new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-        new Claim(ClaimTypes.Email, user.Email),
+        new Claim(JwtRegisteredClaimNames.Email, user.Email),
         new Claim("email_confirmed", user.EmailConfirmed.ToString())
     }.Union(claims)
     .Union(roles.Select(role => new Claim(ClaimTypes.Role, role)));
