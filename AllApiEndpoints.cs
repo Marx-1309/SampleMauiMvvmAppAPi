@@ -15,7 +15,7 @@ public static class AllApiEndpoints
         {
             return await db.Customer.ToListAsync();
         })
-        .WithName("GetAllCustomers")
+        .WithName("GetAllCustomers").AllowAnonymous()
         .WithOpenApi();
 
         group.MapGet("/{id}", async Task<Results<Ok<Customer>, NotFound>> (int id, WaterBillingMobileAppAPiContext db) =>
@@ -26,7 +26,7 @@ public static class AllApiEndpoints
                     ? TypedResults.Ok(model)
                     : TypedResults.NotFound();
         })
-        .WithName("GetCustomerById")
+        .WithName("GetCustomerById").AllowAnonymous()
         .WithOpenApi();
 
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int id, Customer customer, WaterBillingMobileAppAPiContext db) =>
@@ -143,7 +143,7 @@ public static class AllApiEndpoints
 
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
         })
-        .WithName("UpdateCustomer")
+        .WithName("UpdateCustomer").AllowAnonymous()
         .WithOpenApi();
 
         group.MapPost("/", async (Customer customer, WaterBillingMobileAppAPiContext db) =>
@@ -152,7 +152,7 @@ public static class AllApiEndpoints
             await db.SaveChangesAsync();
             return TypedResults.Created($"/api/Customer/{customer.Id}",customer);
         })
-        .WithName("CreateCustomer")
+        .WithName("CreateCustomer").AllowAnonymous()
         .WithOpenApi();
 
         group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int id, WaterBillingMobileAppAPiContext db) =>
@@ -163,7 +163,7 @@ public static class AllApiEndpoints
 
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
         })
-        .WithName("DeleteCustomer")
+        .WithName("DeleteCustomer").AllowAnonymous()
         .WithOpenApi();
     }
 	public static void MapDeviceEndpoints (this IEndpointRouteBuilder routes)
@@ -290,7 +290,7 @@ public static class AllApiEndpoints
         {
             return await db.Reading.ToListAsync();
         })
-        .WithName("GetAllReadings")
+        .WithName("GetAllReadings").AllowAnonymous()
         .WithOpenApi();
 
         group.MapGet("/{id}", async Task<Results<Ok<Reading>, NotFound>> (int id, WaterBillingMobileAppAPiContext db) =>
@@ -301,7 +301,7 @@ public static class AllApiEndpoints
                     ? TypedResults.Ok(model)
                     : TypedResults.NotFound();
         })
-        .WithName("GetReadingById")
+        .WithName("GetReadingById").AllowAnonymous()
         .WithOpenApi();
 
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int id, Reading reading, WaterBillingMobileAppAPiContext db) =>
@@ -332,7 +332,7 @@ public static class AllApiEndpoints
 
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
         })
-        .WithName("UpdateReading")
+        .WithName("UpdateReading").AllowAnonymous()
         .WithOpenApi();
 
         group.MapPost("/", async (Reading reading, WaterBillingMobileAppAPiContext db) =>
@@ -341,7 +341,7 @@ public static class AllApiEndpoints
             await db.SaveChangesAsync();
             return TypedResults.Created($"/api/Reading/{reading.Id}",reading);
         })
-        .WithName("CreateReading")
+        .WithName("CreateReading").AllowAnonymous()
         .WithOpenApi();
 
         group.MapPost("/list", async (List<Reading> readings, WaterBillingMobileAppAPiContext db) =>
@@ -350,7 +350,7 @@ public static class AllApiEndpoints
             await db.SaveChangesAsync();
             return TypedResults.Created($"/api/Reading/list", readings);
         })
-       .WithName("CreateReadingList")
+       .WithName("CreateReadingList").AllowAnonymous()
        .WithOpenApi();
 
         group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int id, WaterBillingMobileAppAPiContext db) =>
@@ -361,7 +361,7 @@ public static class AllApiEndpoints
 
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
         })
-        .WithName("DeleteReading")
+        .WithName("DeleteReading").AllowAnonymous()
         .WithOpenApi();
     }
 	public static void MapReadingExportEndpoints (this IEndpointRouteBuilder routes)
