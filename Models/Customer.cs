@@ -1,12 +1,15 @@
-﻿using SQLite;
-using System.ComponentModel;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WaterBillingMobileAppAPi.Models
 {
     public class Customer
     {
-        [PrimaryKey, AutoIncrement]
-        public int Id { get; set; }
+
+        [Column("CUSTMBR")]
+        [Key]
+        public string? CUSTMBR { get; set; }
 
         public string? CUSTNAME { get; set; }
 
@@ -210,9 +213,10 @@ namespace WaterBillingMobileAppAPi.Models
         public DateTime DEX_ROW_TS { get; set; }
 
         public int DEX_ROW_ID { get; set; }
+        
+        public bool? PrintingActive { get; set; }
+        public bool? OutstandingLetterActive { get; set; }
 
-        public double GEO_LATITUTE { get; set; }
 
-        public double GEO_LONGITUDE { get; set; }
     }
 }

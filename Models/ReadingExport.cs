@@ -8,12 +8,14 @@ namespace WaterBillingMobileAppAPi.Models
     {
         [PrimaryKey]
         public int Id { get; set; }
-
-        [ForeignKey(typeof(Month), Name = "Id")]
         public int MonthID { get; set; }
+        public Month? Month { get; set; } // Navigational property for Month
+
         public int Year { get; set; }
         public int RM00303Id { get; set; }
-        [OneToMany]
+        public RM00303? RM00303 { get; set; } // Navigational property for RM00303
+
         public List<Reading>? Readings { get; set; }
+
     }
 }

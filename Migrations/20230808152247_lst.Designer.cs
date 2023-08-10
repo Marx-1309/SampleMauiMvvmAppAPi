@@ -12,8 +12,8 @@ using WaterBillingMobileAppAPi.Data;
 namespace WaterBillingMobileAppAPi.Migrations
 {
     [DbContext(typeof(WaterBillingMobileAppAPiContext))]
-    [Migration("20230724150746_1st_Migration")]
-    partial class _1st_Migration
+    [Migration("20230808152247_lst")]
+    partial class lst
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -160,15 +160,15 @@ namespace WaterBillingMobileAppAPi.Migrations
                         {
                             Id = "408aa945-3d84-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "dacf39d6-3621-43a1-a273-7e52719a10b9",
+                            ConcurrencyStamp = "a321feea-f12b-4b03-b486-c3bce716b6d1",
                             Email = "admin@localhost.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOST.COM",
                             NormalizedUserName = "ADMIN@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEE79jNgfMoXk1rUke6bOHtzN4h783Nk6J1rxR+F9G3T3uI++n6k6SZqIFnInkc252A==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEI6TaQkzVKyOuUW1/bRUdXNX2wtvfTviubyDn2aKy8A47PmdHI2cexuCB6tROOY6hw==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "8b090356-2409-4711-8c2b-fdcbd1d7278c",
+                            SecurityStamp = "b2b22260-5715-4321-be56-8104b5db6f04",
                             TwoFactorEnabled = false,
                             UserName = "admin@localhost.com"
                         },
@@ -176,15 +176,15 @@ namespace WaterBillingMobileAppAPi.Migrations
                         {
                             Id = "3f4631bd-f907-4409-b416-ba356312e659",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "2877614f-2f77-460a-8518-907a7b8ca881",
+                            ConcurrencyStamp = "53ab65a7-a983-43a7-82e2-e04c2193104d",
                             Email = "user@localhost.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@LOCALHOST.COM",
                             NormalizedUserName = "USER@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEN04/Y5JrWdbcqDmFGGUzdETaS1ln9gvFdM+We28N25VGo70a/CVWZkDLJi1SMKCGw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOtVgBUgP1Z7JY7kNb3Yuqlq9qYBlOhf1VqVdQMWvw+EnheWx4QJphL2h3ittW+0bA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e8604866-c61b-4bda-8ea6-af4d244cb885",
+                            SecurityStamp = "85173b5a-5707-4733-8a60-e15c788fa448",
                             TwoFactorEnabled = false,
                             UserName = "user@localhost.com"
                         });
@@ -285,11 +285,9 @@ namespace WaterBillingMobileAppAPi.Migrations
 
             modelBuilder.Entity("WaterBillingMobileAppAPi.Models.Customer", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    b.Property<string>("CUSTMBR")
+                        .HasColumnType("nvarchar(450)")
+                        .HasColumnName("CUSTMBR");
 
                     b.Property<string>("ADDRESS1")
                         .HasColumnType("nvarchar(max)");
@@ -417,12 +415,6 @@ namespace WaterBillingMobileAppAPi.Migrations
                     b.Property<DateTime>("FRSTINDT")
                         .HasColumnType("datetime2");
 
-                    b.Property<double>("GEO_LATITUTE")
-                        .HasColumnType("float");
-
-                    b.Property<double>("GEO_LONGITUDE")
-                        .HasColumnType("float");
-
                     b.Property<string>("GOVCRPID")
                         .HasColumnType("nvarchar(max)");
 
@@ -483,6 +475,9 @@ namespace WaterBillingMobileAppAPi.Migrations
                     b.Property<int>("ORDERFULFILLDEFAULT")
                         .HasColumnType("int");
 
+                    b.Property<bool?>("OutstandingLetterActive")
+                        .HasColumnType("bit");
+
                     b.Property<string>("PHONE1")
                         .HasColumnType("nvarchar(max)");
 
@@ -506,6 +501,9 @@ namespace WaterBillingMobileAppAPi.Migrations
 
                     b.Property<int>("Post_Results_To")
                         .HasColumnType("int");
+
+                    b.Property<bool?>("PrintingActive")
+                        .HasColumnType("bit");
 
                     b.Property<string>("RATETPID")
                         .HasColumnType("nvarchar(max)");
@@ -603,7 +601,7 @@ namespace WaterBillingMobileAppAPi.Migrations
                     b.Property<string>("ZIP")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("Id");
+                    b.HasKey("CUSTMBR");
 
                     b.ToTable("Customer");
                 });
@@ -752,8 +750,9 @@ namespace WaterBillingMobileAppAPi.Migrations
                     b.Property<string>("CUSTOMER_NAME")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("CUSTOMER_NUMBER")
-                        .HasColumnType("int");
+                    b.Property<string>("CUSTOMER_NUMBER")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CUSTOMER_ZONING")
                         .HasColumnType("nvarchar(max)");

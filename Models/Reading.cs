@@ -6,9 +6,10 @@ namespace WaterBillingMobileAppAPi.Models
     public class Reading
     {
         [PrimaryKey, AutoIncrement]
+        [Column("WaterReadingExportDataID")]
         public int Id { get; set; }
         public int WaterReadingExportID { get; set; }
-        public int CUSTOMER_NUMBER { get; set; }
+        public string CUSTOMER_NUMBER { get; set; }
         public string? CUSTOMER_NAME { get; set; }
         public string? AREA { get; set; }
         public string? ERF_NUMBER { get; set; }

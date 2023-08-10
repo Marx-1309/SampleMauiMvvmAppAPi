@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WaterBillingMobileAppAPi.Data;
 
@@ -11,9 +12,11 @@ using WaterBillingMobileAppAPi.Data;
 namespace WaterBillingMobileAppAPi.Migrations
 {
     [DbContext(typeof(WaterBillingMobileAppAPiContext))]
-    partial class WaterBillingMobileAppAPiContextModelSnapshot : ModelSnapshot
+    [Migration("20230808144953_RemovedGeoColumns")]
+    partial class RemovedGeoColumns
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -157,15 +160,15 @@ namespace WaterBillingMobileAppAPi.Migrations
                         {
                             Id = "408aa945-3d84-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8ebb95da-a4be-487b-b7a8-c6a67ca777ba",
+                            ConcurrencyStamp = "9b16b4db-48c3-41a9-bd56-a7c4d809490f",
                             Email = "admin@localhost.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOST.COM",
                             NormalizedUserName = "ADMIN@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEHlggB4EV494yCVMZkHlyqPhqFhxyyKGvluonzuL3IQie5EoEpP5sX50bIaWdOv3hw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEP2JUFD9NB8oOBbYd92KpWY1/zUeyM2bZgC0o3ykmHp3m/h+XgP+fQ/dN88ubhB58w==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7203b36f-575f-442b-85d8-87267ec52f1b",
+                            SecurityStamp = "d8614310-463a-4475-8e8c-e38a5b753fd2",
                             TwoFactorEnabled = false,
                             UserName = "admin@localhost.com"
                         },
@@ -173,15 +176,15 @@ namespace WaterBillingMobileAppAPi.Migrations
                         {
                             Id = "3f4631bd-f907-4409-b416-ba356312e659",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8dfca399-b575-475f-9623-88835048fe25",
+                            ConcurrencyStamp = "496a900b-6d56-44e1-acdb-d4847ec00026",
                             Email = "user@localhost.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@LOCALHOST.COM",
                             NormalizedUserName = "USER@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGWqSFB7/QMcly28ni8qKkc44cI6tZlfHs/RvQ8E0QgciWc6t2+zWU/OXG0ISbAjIg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEOm7eMlmB0YYuNc6tn48t4Ga8iN/CrAI7+/RyfF979d40Xx4YKAT1jZP0j7USZkpHg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "621bc901-4d38-44a9-9246-8eb509025db4",
+                            SecurityStamp = "8288a69e-01eb-476b-8706-cb5a1c9ad156",
                             TwoFactorEnabled = false,
                             UserName = "user@localhost.com"
                         });
@@ -472,7 +475,7 @@ namespace WaterBillingMobileAppAPi.Migrations
                     b.Property<int>("ORDERFULFILLDEFAULT")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("OutstandingLetterActive")
+                    b.Property<bool>("OutstandingLetterActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("PHONE1")
@@ -499,7 +502,7 @@ namespace WaterBillingMobileAppAPi.Migrations
                     b.Property<int>("Post_Results_To")
                         .HasColumnType("int");
 
-                    b.Property<bool?>("PrintingActive")
+                    b.Property<bool>("PrintingActive")
                         .HasColumnType("bit");
 
                     b.Property<string>("RATETPID")
@@ -825,8 +828,6 @@ namespace WaterBillingMobileAppAPi.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("MonthID");
-
                     b.HasIndex("RM00303Id1");
 
                     b.ToTable("ReadingExport");
@@ -913,19 +914,9 @@ namespace WaterBillingMobileAppAPi.Migrations
 
             modelBuilder.Entity("WaterBillingMobileAppAPi.Models.ReadingExport", b =>
                 {
-                    b.HasOne("WaterBillingMobileAppAPi.Models.Month", "Month")
-                        .WithMany()
-                        .HasForeignKey("MonthID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WaterBillingMobileAppAPi.Models.RM00303", "RM00303")
+                    b.HasOne("WaterBillingMobileAppAPi.Models.RM00303", null)
                         .WithMany("ReadingExport")
                         .HasForeignKey("RM00303Id1");
-
-                    b.Navigation("Month");
-
-                    b.Navigation("RM00303");
                 });
 
             modelBuilder.Entity("WaterBillingMobileAppAPi.Models.RM00303", b =>

@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using WaterBillingMobileAppAPi.Data;
 
@@ -11,9 +12,11 @@ using WaterBillingMobileAppAPi.Data;
 namespace WaterBillingMobileAppAPi.Migrations
 {
     [DbContext(typeof(WaterBillingMobileAppAPiContext))]
-    partial class WaterBillingMobileAppAPiContextModelSnapshot : ModelSnapshot
+    [Migration("20230810101516_AddedNavPropsOnReadingExportTable")]
+    partial class AddedNavPropsOnReadingExportTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

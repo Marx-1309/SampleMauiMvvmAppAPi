@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace WaterBillingMobileAppAPi.Migrations
 {
     /// <inheritdoc />
-    public partial class _1st_Migration : Migration
+    public partial class InitialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -56,8 +56,7 @@ namespace WaterBillingMobileAppAPi.Migrations
                 name: "Customer",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CUSTNAME = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CUSTCLAS = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CPRCSTNM = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -160,8 +159,10 @@ namespace WaterBillingMobileAppAPi.Migrations
                     INCLUDEINDP = table.Column<int>(type: "int", nullable: false),
                     DEX_ROW_TS = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DEX_ROW_ID = table.Column<int>(type: "int", nullable: false),
-                    GEO_LATITUTE = table.Column<double>(type: "float", nullable: false),
-                    GEO_LONGITUDE = table.Column<double>(type: "float", nullable: false)
+                    PrintingActive = table.Column<bool>(type: "bit", nullable: false),
+                    OutstandingLetterActive = table.Column<bool>(type: "bit", nullable: false),
+                    GEO_LATITUTE = table.Column<double>(type: "float", nullable: true),
+                    GEO_LONGITUDE = table.Column<double>(type: "float", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -422,8 +423,8 @@ namespace WaterBillingMobileAppAPi.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "3f4631bd-f907-4409-b416-ba356312e659", 0, "2877614f-2f77-460a-8518-907a7b8ca881", "user@localhost.com", true, false, null, "USER@LOCALHOST.COM", "USER@LOCALHOST.COM", "AQAAAAIAAYagAAAAEN04/Y5JrWdbcqDmFGGUzdETaS1ln9gvFdM+We28N25VGo70a/CVWZkDLJi1SMKCGw==", null, false, "e8604866-c61b-4bda-8ea6-af4d244cb885", false, "user@localhost.com" },
-                    { "408aa945-3d84-4421-8342-7269ec64d949", 0, "dacf39d6-3621-43a1-a273-7e52719a10b9", "admin@localhost.com", true, false, null, "ADMIN@LOCALHOST.COM", "ADMIN@LOCALHOST.COM", "AQAAAAIAAYagAAAAEE79jNgfMoXk1rUke6bOHtzN4h783Nk6J1rxR+F9G3T3uI++n6k6SZqIFnInkc252A==", null, false, "8b090356-2409-4711-8c2b-fdcbd1d7278c", false, "admin@localhost.com" }
+                    { "3f4631bd-f907-4409-b416-ba356312e659", 0, "08608d29-744f-4087-aa32-20ad591788e8", "user@localhost.com", true, false, null, "USER@LOCALHOST.COM", "USER@LOCALHOST.COM", "AQAAAAIAAYagAAAAEOXOyXQL2k+bAkhgYhixslpoIqj1lrancuBHAnnBCyYhgHVsMhjiIOonACMwbH/h/A==", null, false, "acfacc94-8804-4ea9-92c7-db8c33ce9ea4", false, "user@localhost.com" },
+                    { "408aa945-3d84-4421-8342-7269ec64d949", 0, "00e53b31-dd8e-482d-a506-3dc7df53ca53", "admin@localhost.com", true, false, null, "ADMIN@LOCALHOST.COM", "ADMIN@LOCALHOST.COM", "AQAAAAIAAYagAAAAEPy8FdDrwXzVuzv/BACcUA17Tfc3vNUDNkw9GqLIRWCbysnMoVdQfPpo87ybcv8RxQ==", null, false, "c3cbba3a-7eed-48cc-8b3d-f39c3a0dc106", false, "admin@localhost.com" }
                 });
 
             migrationBuilder.InsertData(
