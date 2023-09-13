@@ -53,10 +53,55 @@ namespace WaterBillingMobileAppAPi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Customer",
+                name: "BS_Month",
                 columns: table => new
                 {
-                    Id = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    MonthID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MonthName = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BS_Month", x => x.MonthID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BS_WaterReadingExport",
+                columns: table => new
+                {
+                    WaterReadingExportID = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    MonthID = table.Column<int>(type: "int", nullable: false),
+                    Year = table.Column<int>(type: "int", nullable: false),
+                    SALSTERR = table.Column<int>(type: "int", nullable: true),
+                    LastReadings = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BS_WaterReadingExport", x => x.WaterReadingExportID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Device",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    SerialNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: false),
+                    LastActive = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Active = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Device", x => x.Id);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RM00101",
+                columns: table => new
+                {
+                    CUSTNMBR = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CUSTNAME = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CUSTCLAS = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CPRCSTNM = table.Column<string>(type: "nvarchar(max)", nullable: true),
@@ -159,44 +204,12 @@ namespace WaterBillingMobileAppAPi.Migrations
                     INCLUDEINDP = table.Column<int>(type: "int", nullable: false),
                     DEX_ROW_TS = table.Column<DateTime>(type: "datetime2", nullable: false),
                     DEX_ROW_ID = table.Column<int>(type: "int", nullable: false),
-                    PrintingActive = table.Column<bool>(type: "bit", nullable: false),
-                    OutstandingLetterActive = table.Column<bool>(type: "bit", nullable: false),
-                    GEO_LATITUTE = table.Column<double>(type: "float", nullable: true),
-                    GEO_LONGITUDE = table.Column<double>(type: "float", nullable: true)
+                    PrintingActive = table.Column<bool>(type: "bit", nullable: true),
+                    OutstandingLetterActive = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Customer", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Device",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    SerialNumber = table.Column<string>(type: "nvarchar(max)", nullable: false),
-                    UserId = table.Column<int>(type: "int", nullable: false),
-                    LastActive = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Active = table.Column<bool>(type: "bit", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Device", x => x.Id);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Month",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    MonthName = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Year = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Month", x => x.Id);
+                    table.PrimaryKey("PK_RM00101", x => x.CUSTNMBR);
                 });
 
             migrationBuilder.CreateTable(
@@ -353,60 +366,36 @@ namespace WaterBillingMobileAppAPi.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "ReadingExport",
+                name: "BS_WaterReadingExportData",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
+                    WaterReadingExportDataID = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    MonthID = table.Column<int>(type: "int", nullable: false),
-                    Year = table.Column<int>(type: "int", nullable: false),
-                    RM00303Id = table.Column<int>(type: "int", nullable: false),
-                    RM00303Id1 = table.Column<string>(type: "nvarchar(450)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ReadingExport", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_ReadingExport_RM00303_RM00303Id1",
-                        column: x => x.RM00303Id1,
-                        principalTable: "RM00303",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Reading",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    WaterReadingExportID = table.Column<int>(type: "int", nullable: false),
-                    CUSTOMER_NUMBER = table.Column<int>(type: "int", nullable: false),
+                    WaterReadingExportID = table.Column<int>(type: "int", nullable: true),
+                    CUSTOMER_NUMBER = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     CUSTOMER_NAME = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     AREA = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ERF_NUMBER = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     METER_NUMBER = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CURRENT_READING = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    PREVIOUS_READING = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    MonthID = table.Column<int>(type: "int", nullable: false),
-                    Year = table.Column<int>(type: "int", nullable: false),
+                    CURRENT_READING = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    PREVIOUS_READING = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    MonthID = table.Column<int>(type: "int", nullable: true),
+                    Year = table.Column<int>(type: "int", nullable: true),
                     CUSTOMER_ZONING = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     RouteNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    METER_READER = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    WaterReadingTypeId = table.Column<int>(type: "int", nullable: true),
-                    Meter_Reader = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    READING_DATE = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ReadingTaken = table.Column<bool>(type: "bit", nullable: true),
-                    ReadingSync = table.Column<bool>(type: "bit", nullable: true),
-                    ReadingExportId = table.Column<int>(type: "int", nullable: true)
+                    WaterReadingTypeID = table.Column<int>(type: "int", nullable: true),
+                    ReadingExportWaterReadingExportID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Reading", x => x.Id);
+                    table.PrimaryKey("PK_BS_WaterReadingExportData", x => x.WaterReadingExportDataID);
                     table.ForeignKey(
-                        name: "FK_Reading_ReadingExport_ReadingExportId",
-                        column: x => x.ReadingExportId,
-                        principalTable: "ReadingExport",
-                        principalColumn: "Id");
+                        name: "FK_BS_WaterReadingExportData_BS_WaterReadingExport_ReadingExportWaterReadingExportID",
+                        column: x => x.ReadingExportWaterReadingExportID,
+                        principalTable: "BS_WaterReadingExport",
+                        principalColumn: "WaterReadingExportID");
                 });
 
             migrationBuilder.InsertData(
@@ -423,8 +412,8 @@ namespace WaterBillingMobileAppAPi.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "3f4631bd-f907-4409-b416-ba356312e659", 0, "08608d29-744f-4087-aa32-20ad591788e8", "user@localhost.com", true, false, null, "USER@LOCALHOST.COM", "USER@LOCALHOST.COM", "AQAAAAIAAYagAAAAEOXOyXQL2k+bAkhgYhixslpoIqj1lrancuBHAnnBCyYhgHVsMhjiIOonACMwbH/h/A==", null, false, "acfacc94-8804-4ea9-92c7-db8c33ce9ea4", false, "user@localhost.com" },
-                    { "408aa945-3d84-4421-8342-7269ec64d949", 0, "00e53b31-dd8e-482d-a506-3dc7df53ca53", "admin@localhost.com", true, false, null, "ADMIN@LOCALHOST.COM", "ADMIN@LOCALHOST.COM", "AQAAAAIAAYagAAAAEPy8FdDrwXzVuzv/BACcUA17Tfc3vNUDNkw9GqLIRWCbysnMoVdQfPpo87ybcv8RxQ==", null, false, "c3cbba3a-7eed-48cc-8b3d-f39c3a0dc106", false, "admin@localhost.com" }
+                    { "3f4631bd-f907-4409-b416-ba356312e659", 0, "72924b5b-c91d-4dcc-bb4e-abb6565e22b1", "user@localhost.com", true, false, null, "USER@LOCALHOST.COM", "USER@LOCALHOST.COM", "AQAAAAIAAYagAAAAEKcqFGu3F/nBim1hmftRJ+uzoVGg6m8UbqFetPlGwVnQNElx852S4BbdgNqMtMePtg==", null, false, "987f5fc3-14e6-4a43-9df6-e59784259019", false, "user@localhost.com" },
+                    { "408aa945-3d84-4421-8342-7269ec64d949", 0, "7c9beda4-34c2-4448-935f-89e3b4a607af", "admin@localhost.com", true, false, null, "ADMIN@LOCALHOST.COM", "ADMIN@LOCALHOST.COM", "AQAAAAIAAYagAAAAEBUFPlhghxPq13XSCHrLMOseeZlIc+c9NhMCwX+nykHJD2P3R3lhqf0S8eVg7HmGpg==", null, false, "d782f265-fec7-441e-8c03-4b25c574cb82", false, "admin@localhost.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -476,14 +465,9 @@ namespace WaterBillingMobileAppAPi.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Reading_ReadingExportId",
-                table: "Reading",
-                column: "ReadingExportId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_ReadingExport_RM00303Id1",
-                table: "ReadingExport",
-                column: "RM00303Id1");
+                name: "IX_BS_WaterReadingExportData_ReadingExportWaterReadingExportID",
+                table: "BS_WaterReadingExportData",
+                column: "ReadingExportWaterReadingExportID");
         }
 
         /// <inheritdoc />
@@ -505,16 +489,19 @@ namespace WaterBillingMobileAppAPi.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
-                name: "Customer");
+                name: "BS_Month");
+
+            migrationBuilder.DropTable(
+                name: "BS_WaterReadingExportData");
 
             migrationBuilder.DropTable(
                 name: "Device");
 
             migrationBuilder.DropTable(
-                name: "Month");
+                name: "RM00101");
 
             migrationBuilder.DropTable(
-                name: "Reading");
+                name: "RM00303");
 
             migrationBuilder.DropTable(
                 name: "User");
@@ -526,10 +513,7 @@ namespace WaterBillingMobileAppAPi.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "ReadingExport");
-
-            migrationBuilder.DropTable(
-                name: "RM00303");
+                name: "BS_WaterReadingExport");
         }
     }
 }

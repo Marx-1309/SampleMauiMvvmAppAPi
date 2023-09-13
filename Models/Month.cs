@@ -1,17 +1,18 @@
-﻿using SQLite;
+﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WaterBillingMobileAppAPi.Models
 {
+    [Table("BS_Month")]
     public class Month
     {
-        [PrimaryKey,AutoIncrement]
-        public int Id { get; set; }
+        [Key]
+        [Column("MonthID")]
+        public int MonthID { get; set; }
         public string? MonthName { get; set; }
-        public int Year { get; set; }
 
         [NotMapped]
-        public string TitleProp => $"{MonthName} {Year} ";
+        public string TitleProp => $"{MonthName}";
     }
 }
 

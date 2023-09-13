@@ -4,12 +4,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WaterBillingMobileAppAPi.Models
 {
+    [Table("RM00101")]
     public class Customer
     {
 
-        [Column("CUSTMBR")]
+        [Column("CUSTNMBR")]
         [Key]
-        public string? CUSTMBR { get; set; }
+        public string? CUSTNMBR { get; set; }
 
         public string? CUSTNAME { get; set; }
 

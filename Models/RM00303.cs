@@ -1,11 +1,10 @@
-﻿using SQLite;
-using SQLiteNetExtensions.Attributes;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace WaterBillingMobileAppAPi.Models
 {
     public class RM00303
     {
-        [PrimaryKey]
+        [Key]
         public string Id { get; set; }
 
         public string SLTERDSC { get; set; }
@@ -47,7 +46,5 @@ namespace WaterBillingMobileAppAPi.Models
         public DateTime CREATDDT { get; set; }
         public DateTime DEX_ROW_TS { get; set; }
         public int DEX_ROW_ID { get; set; }
-        [OneToMany]
-        public List<ReadingExport>? ReadingExport { get; set; }
     }
 }

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.OpenApi;
 using WaterBillingMobileAppAPi.Data;
 using WaterBillingMobileAppAPi.Models;
+using WaterBillingMobileAppAPi.Mappings.Dto_s;
+
 namespace WaterBillingMobileAppAPi;
 
 public static class AllApiEndpoints
@@ -21,7 +23,7 @@ public static class AllApiEndpoints
         group.MapGet("/{id}", async Task<Results<Ok<Customer>, NotFound>> (string id, WaterBillingMobileAppAPiContext db) =>
         {
             return await db.Customer.AsNoTracking()
-                .FirstOrDefaultAsync(model => model.CUSTMBR == id)
+                .FirstOrDefaultAsync(model => model.CUSTNMBR == id)
                 is Customer model
                     ? TypedResults.Ok(model)
                     : TypedResults.NotFound();
@@ -32,9 +34,9 @@ public static class AllApiEndpoints
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (string id, Customer customer, WaterBillingMobileAppAPiContext db) =>
         {
             var affected = await db.Customer
-                .Where(model => model.CUSTMBR == id)
+                .Where(model => model.CUSTNMBR == id)
                 .ExecuteUpdateAsync(setters => setters
-                  .SetProperty(m => m.CUSTMBR, customer.CUSTMBR)
+                  .SetProperty(m => m.CUSTNMBR, customer.CUSTNMBR)
                   .SetProperty(m => m.CUSTNAME, customer.CUSTNAME)
                   .SetProperty(m => m.CUSTCLAS, customer.CUSTCLAS)
                   .SetProperty(m => m.CPRCSTNM, customer.CPRCSTNM)
@@ -148,7 +150,7 @@ public static class AllApiEndpoints
         {
             db.Customer.Add(customer);
             await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/Customer/{customer.CUSTMBR}",customer);
+            return TypedResults.Created($"/api/Customer/{customer.CUSTNMBR}",customer);
         })
         .WithName("CreateCustomer").AllowAnonymous()
         .WithOpenApi();
@@ -156,7 +158,7 @@ public static class AllApiEndpoints
         group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (string id, WaterBillingMobileAppAPiContext db) =>
         {
             var affected = await db.Customer
-                .Where(model => model.CUSTMBR == id)
+                .Where(model => model.CUSTNMBR == id)
                 .ExecuteDeleteAsync();
 
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
@@ -237,7 +239,7 @@ public static class AllApiEndpoints
         group.MapGet("/{id}", async Task<Results<Ok<Month>, NotFound>> (int id, WaterBillingMobileAppAPiContext db) =>
         {
             return await db.Month.AsNoTracking()
-                .FirstOrDefaultAsync(model => model.Id == id)
+                .FirstOrDefaultAsync(model => model.MonthID == id)
                 is Month model
                     ? TypedResults.Ok(model)
                     : TypedResults.NotFound();
@@ -248,11 +250,10 @@ public static class AllApiEndpoints
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int id, Month month, WaterBillingMobileAppAPiContext db) =>
         {
             var affected = await db.Month
-                .Where(model => model.Id == id)
+                .Where(model => model.MonthID == id)
                 .ExecuteUpdateAsync(setters => setters
-                  .SetProperty(m => m.Id, month.Id)
+                  .SetProperty(m => m.MonthID, month.MonthID)
                   .SetProperty(m => m.MonthName, month.MonthName)
-                  .SetProperty(m => m.Year, month.Year)
                 );
 
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
@@ -264,7 +265,7 @@ public static class AllApiEndpoints
         {
             db.Month.Add(month);
             await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/Month/{month.Id}",month);
+            return TypedResults.Created($"/api/Month/{month.MonthID}",month);
         })
         .WithName("CreateMonth").AllowAnonymous()
         .WithOpenApi();
@@ -272,7 +273,7 @@ public static class AllApiEndpoints
         group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int id, WaterBillingMobileAppAPiContext db) =>
         {
             var affected = await db.Month
-                .Where(model => model.Id == id)
+                .Where(model => model.MonthID == id)
                 .ExecuteDeleteAsync();
 
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
@@ -294,7 +295,7 @@ public static class AllApiEndpoints
         group.MapGet("/{id}", async Task<Results<Ok<Reading>, NotFound>> (int id, WaterBillingMobileAppAPiContext db) =>
         {
             return await db.Reading.AsNoTracking()
-                .FirstOrDefaultAsync(model => model.Id == id)
+                .FirstOrDefaultAsync(model => model.WaterReadingExportDataID == id)
                 is Reading model
                     ? TypedResults.Ok(model)
                     : TypedResults.NotFound();
@@ -302,42 +303,28 @@ public static class AllApiEndpoints
         .WithName("GetReadingById").AllowAnonymous()
         .WithOpenApi();
 
-        group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int id, Reading reading, WaterBillingMobileAppAPiContext db) =>
+        group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (UpdateReadingDto reading, WaterBillingMobileAppAPiContext db) =>
         {
             var affected = await db.Reading
-                .Where(model => model.Id == id)
+                .Where(model => model.WaterReadingExportDataID == reading.WaterReadingExportDataID)
                 .ExecuteUpdateAsync(setters => setters
-                  .SetProperty(m => m.Id, reading.Id)
-                  .SetProperty(m => m.WaterReadingExportID, reading.WaterReadingExportID)
-                  .SetProperty(m => m.CUSTOMER_NUMBER, reading.CUSTOMER_NUMBER)
-                  .SetProperty(m => m.CUSTOMER_NAME, reading.CUSTOMER_NAME)
-                  .SetProperty(m => m.AREA, reading.AREA)
-                  .SetProperty(m => m.ERF_NUMBER, reading.ERF_NUMBER)
-                  .SetProperty(m => m.METER_NUMBER, reading.METER_NUMBER)
-                  .SetProperty(m => m.CURRENT_READING, reading.CURRENT_READING)
-                  .SetProperty(m => m.PREVIOUS_READING, reading.PREVIOUS_READING)
-                  .SetProperty(m => m.MonthID, reading.MonthID)
-                  .SetProperty(m => m.Year, reading.Year)
-                  .SetProperty(m => m.CUSTOMER_ZONING, reading.CUSTOMER_ZONING)
-                  .SetProperty(m => m.RouteNumber, reading.RouteNumber)
-                  .SetProperty(m => m.Comment, reading.Comment)
-                  .SetProperty(m => m.WaterReadingTypeId, reading.WaterReadingTypeId)
-                  .SetProperty(m => m.Meter_Reader, reading.Meter_Reader)
-                  .SetProperty(m => m.READING_DATE, reading.READING_DATE)
-                  .SetProperty(m => m.ReadingTaken, reading.ReadingTaken)
-                  .SetProperty(m => m.ReadingSync, reading.ReadingSync)
+                    .SetProperty(m => m.CURRENT_READING, reading.CURRENT_READING)
+                    .SetProperty(m => m.Comment, reading.Comment)
+                    .SetProperty(m => m.METER_READER, reading.METER_READER)
+                    
                 );
 
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
         })
-        .WithName("UpdateReading").AllowAnonymous()
-        .WithOpenApi();
+     .WithName("UpdateReading").AllowAnonymous()
+     .WithOpenApi();
+
 
         group.MapPost("/", async (Reading reading, WaterBillingMobileAppAPiContext db) =>
         {
             db.Reading.Add(reading);
             await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/Reading/{reading.Id}",reading);
+            return TypedResults.Created($"/api/Reading/{reading.WaterReadingExportDataID}",reading);
         })
         .WithName("CreateReading").AllowAnonymous()
         .WithOpenApi();
@@ -354,7 +341,7 @@ public static class AllApiEndpoints
         group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int id, WaterBillingMobileAppAPiContext db) =>
         {
             var affected = await db.Reading
-                .Where(model => model.Id == id)
+                .Where(model => model.WaterReadingExportDataID == id)
                 .ExecuteDeleteAsync();
 
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
@@ -376,7 +363,7 @@ public static class AllApiEndpoints
         group.MapGet("/{id}", async Task<Results<Ok<ReadingExport>, NotFound>> (int id, WaterBillingMobileAppAPiContext db) =>
         {
             return await db.ReadingExport.AsNoTracking()
-                .FirstOrDefaultAsync(model => model.Id == id)
+                .FirstOrDefaultAsync(model => model.WaterReadingExportID == id)
                 is ReadingExport model
                     ? TypedResults.Ok(model)
                     : TypedResults.NotFound();
@@ -387,12 +374,12 @@ public static class AllApiEndpoints
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int id, ReadingExport readingExport, WaterBillingMobileAppAPiContext db) =>
         {
             var affected = await db.ReadingExport
-                .Where(model => model.Id == id)
+                .Where(model => model.WaterReadingExportID == id)
                 .ExecuteUpdateAsync(setters => setters
-                  .SetProperty(m => m.Id, readingExport.Id)
+                  .SetProperty(m => m.WaterReadingExportID, readingExport.WaterReadingExportID)
                   .SetProperty(m => m.MonthID, readingExport.MonthID)
                   .SetProperty(m => m.Year, readingExport.Year)
-                  .SetProperty(m => m.RM00303Id, readingExport.RM00303Id)
+                  .SetProperty(m => m.SALSTERR, readingExport.SALSTERR)
                 );
 
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
@@ -404,7 +391,7 @@ public static class AllApiEndpoints
         {
             db.ReadingExport.Add(readingExport);
             await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/ReadingExport/{readingExport.Id}",readingExport);
+            return TypedResults.Created($"/api/ReadingExport/{readingExport.WaterReadingExportID}",readingExport);
         })
         .WithName("CreateReadingExport").AllowAnonymous()
         .WithOpenApi();
@@ -412,7 +399,7 @@ public static class AllApiEndpoints
         group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int id, WaterBillingMobileAppAPiContext db) =>
         {
             var affected = await db.ReadingExport
-                .Where(model => model.Id == id)
+                .Where(model => model.WaterReadingExportID == id)
                 .ExecuteDeleteAsync();
 
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();

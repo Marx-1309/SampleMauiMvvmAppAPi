@@ -1,5 +1,5 @@
-﻿using SQLite;
-using SQLiteNetExtensions.Attributes;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WaterBillingMobileAppAPi.Models
 {
@@ -11,11 +11,9 @@ namespace WaterBillingMobileAppAPi.Models
             this.LastActive = DateTime.Now;
         }
 
-        [PrimaryKey, AutoIncrement]
+        [Key]
         public int Id { get; set; }
         public string SerialNumber { get; set; }
-
-        [ForeignKey(typeof(User), Name = "Id")]
         public int UserId { get; set; }
         public DateTime LastActive { get; set; }
         public bool Active { get; set; }

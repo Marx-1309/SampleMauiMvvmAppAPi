@@ -157,15 +157,15 @@ namespace WaterBillingMobileAppAPi.Migrations
                         {
                             Id = "408aa945-3d84-4421-8342-7269ec64d949",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8ebb95da-a4be-487b-b7a8-c6a67ca777ba",
+                            ConcurrencyStamp = "7c9beda4-34c2-4448-935f-89e3b4a607af",
                             Email = "admin@localhost.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@LOCALHOST.COM",
                             NormalizedUserName = "ADMIN@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEHlggB4EV494yCVMZkHlyqPhqFhxyyKGvluonzuL3IQie5EoEpP5sX50bIaWdOv3hw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEBUFPlhghxPq13XSCHrLMOseeZlIc+c9NhMCwX+nykHJD2P3R3lhqf0S8eVg7HmGpg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "7203b36f-575f-442b-85d8-87267ec52f1b",
+                            SecurityStamp = "d782f265-fec7-441e-8c03-4b25c574cb82",
                             TwoFactorEnabled = false,
                             UserName = "admin@localhost.com"
                         },
@@ -173,15 +173,15 @@ namespace WaterBillingMobileAppAPi.Migrations
                         {
                             Id = "3f4631bd-f907-4409-b416-ba356312e659",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8dfca399-b575-475f-9623-88835048fe25",
+                            ConcurrencyStamp = "72924b5b-c91d-4dcc-bb4e-abb6565e22b1",
                             Email = "user@localhost.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "USER@LOCALHOST.COM",
                             NormalizedUserName = "USER@LOCALHOST.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEGWqSFB7/QMcly28ni8qKkc44cI6tZlfHs/RvQ8E0QgciWc6t2+zWU/OXG0ISbAjIg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEKcqFGu3F/nBim1hmftRJ+uzoVGg6m8UbqFetPlGwVnQNElx852S4BbdgNqMtMePtg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "621bc901-4d38-44a9-9246-8eb509025db4",
+                            SecurityStamp = "987f5fc3-14e6-4a43-9df6-e59784259019",
                             TwoFactorEnabled = false,
                             UserName = "user@localhost.com"
                         });
@@ -282,9 +282,9 @@ namespace WaterBillingMobileAppAPi.Migrations
 
             modelBuilder.Entity("WaterBillingMobileAppAPi.Models.Customer", b =>
                 {
-                    b.Property<string>("CUSTMBR")
+                    b.Property<string>("CUSTNMBR")
                         .HasColumnType("nvarchar(450)")
-                        .HasColumnName("CUSTMBR");
+                        .HasColumnName("CUSTNMBR");
 
                     b.Property<string>("ADDRESS1")
                         .HasColumnType("nvarchar(max)");
@@ -598,9 +598,9 @@ namespace WaterBillingMobileAppAPi.Migrations
                     b.Property<string>("ZIP")
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("CUSTMBR");
+                    b.HasKey("CUSTNMBR");
 
-                    b.ToTable("Customer");
+                    b.ToTable("RM00101");
                 });
 
             modelBuilder.Entity("WaterBillingMobileAppAPi.Models.Device", b =>
@@ -631,21 +631,19 @@ namespace WaterBillingMobileAppAPi.Migrations
 
             modelBuilder.Entity("WaterBillingMobileAppAPi.Models.Month", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("MonthID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("MonthID");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("MonthID"));
 
                     b.Property<string>("MonthName")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("Year")
-                        .HasColumnType("int");
+                    b.HasKey("MonthID");
 
-                    b.HasKey("Id");
-
-                    b.ToTable("Month");
+                    b.ToTable("BS_Month");
                 });
 
             modelBuilder.Entity("WaterBillingMobileAppAPi.Models.RM00303", b =>
@@ -732,23 +730,23 @@ namespace WaterBillingMobileAppAPi.Migrations
 
             modelBuilder.Entity("WaterBillingMobileAppAPi.Models.Reading", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int?>("WaterReadingExportDataID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("WaterReadingExportDataID");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("WaterReadingExportDataID"));
 
                     b.Property<string>("AREA")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("CURRENT_READING")
+                    b.Property<decimal?>("CURRENT_READING")
                         .HasColumnType("decimal(18,2)");
 
                     b.Property<string>("CUSTOMER_NAME")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CUSTOMER_NUMBER")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("CUSTOMER_ZONING")
@@ -763,73 +761,61 @@ namespace WaterBillingMobileAppAPi.Migrations
                     b.Property<string>("METER_NUMBER")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<string>("Meter_Reader")
+                    b.Property<string>("METER_READER")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("MonthID")
+                    b.Property<int?>("MonthID")
                         .HasColumnType("int");
 
-                    b.Property<decimal>("PREVIOUS_READING")
+                    b.Property<decimal?>("PREVIOUS_READING")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<DateTime?>("READING_DATE")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int?>("ReadingExportId")
+                    b.Property<int?>("ReadingExportWaterReadingExportID")
                         .HasColumnType("int");
-
-                    b.Property<bool?>("ReadingSync")
-                        .HasColumnType("bit");
-
-                    b.Property<bool?>("ReadingTaken")
-                        .HasColumnType("bit");
 
                     b.Property<string>("RouteNumber")
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("WaterReadingExportID")
+                    b.Property<int?>("WaterReadingExportID")
                         .HasColumnType("int");
 
-                    b.Property<int?>("WaterReadingTypeId")
+                    b.Property<int?>("WaterReadingTypeID")
                         .HasColumnType("int");
 
-                    b.Property<int>("Year")
+                    b.Property<int?>("Year")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("WaterReadingExportDataID");
 
-                    b.HasIndex("ReadingExportId");
+                    b.HasIndex("ReadingExportWaterReadingExportID");
 
-                    b.ToTable("Reading");
+                    b.ToTable("BS_WaterReadingExportData");
                 });
 
             modelBuilder.Entity("WaterBillingMobileAppAPi.Models.ReadingExport", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<int>("WaterReadingExportID")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("int")
+                        .HasColumnName("WaterReadingExportID");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WaterReadingExportID"));
+
+                    b.Property<bool>("LastReadings")
+                        .HasColumnType("bit");
 
                     b.Property<int>("MonthID")
                         .HasColumnType("int");
 
-                    b.Property<int>("RM00303Id")
+                    b.Property<int?>("SALSTERR")
                         .HasColumnType("int");
-
-                    b.Property<string>("RM00303Id1")
-                        .HasColumnType("nvarchar(450)");
 
                     b.Property<int>("Year")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
+                    b.HasKey("WaterReadingExportID");
 
-                    b.HasIndex("MonthID");
-
-                    b.HasIndex("RM00303Id1");
-
-                    b.ToTable("ReadingExport");
+                    b.ToTable("BS_WaterReadingExport");
                 });
 
             modelBuilder.Entity("WaterBillingMobileAppAPi.Models.User", b =>
@@ -908,29 +894,7 @@ namespace WaterBillingMobileAppAPi.Migrations
                 {
                     b.HasOne("WaterBillingMobileAppAPi.Models.ReadingExport", null)
                         .WithMany("Readings")
-                        .HasForeignKey("ReadingExportId");
-                });
-
-            modelBuilder.Entity("WaterBillingMobileAppAPi.Models.ReadingExport", b =>
-                {
-                    b.HasOne("WaterBillingMobileAppAPi.Models.Month", "Month")
-                        .WithMany()
-                        .HasForeignKey("MonthID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("WaterBillingMobileAppAPi.Models.RM00303", "RM00303")
-                        .WithMany("ReadingExport")
-                        .HasForeignKey("RM00303Id1");
-
-                    b.Navigation("Month");
-
-                    b.Navigation("RM00303");
-                });
-
-            modelBuilder.Entity("WaterBillingMobileAppAPi.Models.RM00303", b =>
-                {
-                    b.Navigation("ReadingExport");
+                        .HasForeignKey("ReadingExportWaterReadingExportID");
                 });
 
             modelBuilder.Entity("WaterBillingMobileAppAPi.Models.ReadingExport", b =>

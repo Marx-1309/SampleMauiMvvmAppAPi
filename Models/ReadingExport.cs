@@ -1,20 +1,18 @@
-﻿using SQLite;
-using SQLiteNetExtensions.Attributes;
-
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace WaterBillingMobileAppAPi.Models
 {
+    [Table("BS_WaterReadingExport")]
     public class ReadingExport
     {
-        [PrimaryKey]
-        public int Id { get; set; }
+        [Key]
+        [Column("WaterReadingExportID")]
+        public int WaterReadingExportID { get; set; }
         public int MonthID { get; set; }
-        public Month? Month { get; set; } // Navigational property for Month
-
         public int Year { get; set; }
-        public int RM00303Id { get; set; }
-        public RM00303? RM00303 { get; set; } // Navigational property for RM00303
-
+        public int? SALSTERR { get; set; }
+        public bool LastReadings { get;set; }
         public List<Reading>? Readings { get; set; }
 
     }
