@@ -9,7 +9,7 @@ namespace WaterBillingMobileAppAPi;
 
 public static class AllApiEndpoints
 {
-    public static void MapCustomerEndpoints (this IEndpointRouteBuilder routes)
+    public static void MapCustomerEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/Customer").WithTags(nameof(Customer));
 
@@ -43,7 +43,7 @@ public static class AllApiEndpoints
                   .SetProperty(m => m.ADDRESS2, customer.ADDRESS2)
                   .SetProperty(m => m.ADDRESS3, customer.ADDRESS3)
                   .SetProperty(m => m.ZIP, customer.ZIP)
-        
+
                 );
 
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
@@ -55,7 +55,7 @@ public static class AllApiEndpoints
         {
             db.Customer.Add(customer);
             await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/Customer/{customer.CUSTNMBR}",customer);
+            return TypedResults.Created($"/api/Customer/{customer.CUSTNMBR}", customer);
         })
         .WithName("CreateCustomer").AllowAnonymous()
         .WithOpenApi();
@@ -71,7 +71,7 @@ public static class AllApiEndpoints
         .WithName("DeleteCustomer").AllowAnonymous()
         .WithOpenApi();
     }
-	public static void MapDeviceEndpoints (this IEndpointRouteBuilder routes)
+    public static void MapDeviceEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/Device").WithTags(nameof(Device));
 
@@ -114,7 +114,7 @@ public static class AllApiEndpoints
         {
             db.Device.Add(device);
             await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/Device/{device.Id}",device);
+            return TypedResults.Created($"/api/Device/{device.Id}", device);
         })
         .WithName("CreateDevice")
         .WithOpenApi();
@@ -130,7 +130,7 @@ public static class AllApiEndpoints
         .WithName("DeleteDevice")
         .WithOpenApi();
     }
-	public static void MapMonthEndpoints (this IEndpointRouteBuilder routes)
+    public static void MapMonthEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/Month").WithTags(nameof(Month));
 
@@ -170,7 +170,7 @@ public static class AllApiEndpoints
         {
             db.Month.Add(month);
             await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/Month/{month.MonthID}",month);
+            return TypedResults.Created($"/api/Month/{month.MonthID}", month);
         })
         .WithName("CreateMonth").AllowAnonymous()
         .WithOpenApi();
@@ -186,8 +186,8 @@ public static class AllApiEndpoints
         .WithName("DeleteMonth").AllowAnonymous()
         .WithOpenApi();
     }
-	
-	public static void MapReadingExportEndpoints (this IEndpointRouteBuilder routes)
+
+    public static void MapReadingExportEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/ReadingExport").WithTags(nameof(ReadingExport));
 
@@ -229,7 +229,7 @@ public static class AllApiEndpoints
         {
             db.ReadingExport.Add(readingExport);
             await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/ReadingExport/{readingExport.WaterReadingExportID}",readingExport);
+            return TypedResults.Created($"/api/ReadingExport/{readingExport.WaterReadingExportID}", readingExport);
         })
         .WithName("CreateReadingExport").AllowAnonymous()
         .WithOpenApi();
@@ -245,7 +245,7 @@ public static class AllApiEndpoints
         .WithName("DeleteReadingExport")
         .WithOpenApi();
     }
-	public static void MapRM00303Endpoints (this IEndpointRouteBuilder routes)
+    public static void MapRM00303Endpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/RM00303").WithTags(nameof(RM00303));
 
@@ -285,7 +285,7 @@ public static class AllApiEndpoints
         {
             db.RM00303.Add(rM00303);
             await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/RM00303/{rM00303.SALSTERR}",rM00303);
+            return TypedResults.Created($"/api/RM00303/{rM00303.SALSTERR}", rM00303);
         })
         .WithName("CreateRM00303").AllowAnonymous()
         .WithOpenApi();
@@ -301,7 +301,7 @@ public static class AllApiEndpoints
         .WithName("DeleteRM00303").AllowAnonymous()
         .WithOpenApi();
     }
-	public static void MapUserEndpoints (this IEndpointRouteBuilder routes)
+    public static void MapUserEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/User").WithTags(nameof(User));
 
@@ -342,7 +342,7 @@ public static class AllApiEndpoints
         {
             db.User.Add(user);
             await db.SaveChangesAsync();
-            return TypedResults.Created($"/api/User/{user.Id}",user);
+            return TypedResults.Created($"/api/User/{user.Id}", user);
         })
         .WithName("CreateUser")
         .WithOpenApi();
@@ -358,7 +358,7 @@ public static class AllApiEndpoints
         .WithName("DeleteUser")
         .WithOpenApi();
     }
-	public static void MapReadingEndpoints (this IEndpointRouteBuilder routes)
+    public static void MapReadingEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/Reading").WithTags(nameof(Reading));
 
