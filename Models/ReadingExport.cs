@@ -8,10 +8,10 @@ namespace WaterBillingMobileAppAPi.Models
     {
         [Key]
         [Column("WaterReadingExportID")]
-        public int WaterReadingExportID { get; set; }
-        public int MonthID { get; set; }
-        public int Year { get; set; }
-        public int? SALSTERR { get; set; }
+        public long WaterReadingExportID { get; set; }
+        public long MonthID { get; set; }
+        public long Year { get; set; }
+        public string? SALSTERR { get; set; }
         public bool LastReadings { get;set; }
         public List<Reading>? Readings { get; set; }
 

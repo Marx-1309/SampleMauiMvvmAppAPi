@@ -18,20 +18,24 @@ namespace WaterBillingMobileAppAPi.Data
         {
         }
 
+
+
         public DbSet<WaterBillingMobileAppAPi.Models.ReadingExport> ReadingExport { get; set; } = default!;
 
         public DbSet<WaterBillingMobileAppAPi.Models.User> User { get; set; } = default!;
-        
+
         public DbSet<WaterBillingMobileAppAPi.Models.Customer> Customer { get; set; } = default!;
-        
+
         public DbSet<WaterBillingMobileAppAPi.Models.Reading> Reading { get; set; } = default!;
 
-        
+
         public DbSet<WaterBillingMobileAppAPi.Models.RM00303> RM00303 { get; set; } = default!;
-        
+
         public DbSet<WaterBillingMobileAppAPi.Models.Month> Month { get; set; } = default!;
-        
+
         public DbSet<WaterBillingMobileAppAPi.Models.Device> Device { get; set; } = default!;
+
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

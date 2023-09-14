@@ -86,7 +86,6 @@ app.MapDeviceEndpoints();
 
 app.MapMonthEndpoints();
 
-app.MapReadingEndpoints();
 
 app.MapReadingExportEndpoints();
 
@@ -144,6 +143,8 @@ app.MapPost("/login", async (LoginDto loginDto, UserManager<IdentityUser> _userM
 
     return Results.Ok(response);
 }).AllowAnonymous();
+
+app.MapReadingEndpoints();
 
 
 app.Run();

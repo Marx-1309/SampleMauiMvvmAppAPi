@@ -10,6 +10,7 @@ namespace WaterBillingMobileAppAPi.Mappings.Maps
         {
            
             CreateMap<Reading, UpdateReadingDto>().ReverseMap();
+            CreateMap<Customer, CustomerDto>().ReverseMap();
         }
     }
 }

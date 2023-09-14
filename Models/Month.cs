@@ -8,7 +8,7 @@ namespace WaterBillingMobileAppAPi.Models
     {
         [Key]
         [Column("MonthID")]
-        public int MonthID { get; set; }
+        public long MonthID { get; set; }
         public string? MonthName { get; set; }
 
         [NotMapped]
