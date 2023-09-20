@@ -8,16 +8,8 @@ namespace WaterBillingMobileAppAPi.Mappings.Dto_s
     {
         public string CUSTMBR { get; set; }
         public string CUSTNAME { get; set; }
-
         public string CUSTCLAS { get; set; }
-
-        
-        public string ADDRESS1 { get; set; }
-
-        public string ADDRESS2 { get; set; }
-
-        public string ADDRESS3 { get; set; }
-
+        public string STATE { get; set; }
         public string ZIP { get; set; }
     }
 }

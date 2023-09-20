@@ -11,7 +11,7 @@ public static class AllApiEndpoints
 {
     public static void MapCustomerEndpoints(this IEndpointRouteBuilder routes)
     {
-        var group = routes.MapGroup("/api/Customer").WithTags(nameof(Customer));
+        var group = routes.MapGroup("/api/Customer").WithTags(nameof(CustomerDto));
 
         group.MapGet("/", async (WaterBillingMobileAppAPiContext db) =>
         {
@@ -31,17 +31,15 @@ public static class AllApiEndpoints
         .WithName("GetCustomerById").AllowAnonymous()
         .WithOpenApi();
 
-        group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (string id, Customer customer, WaterBillingMobileAppAPiContext db) =>
+        group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (string id, CustomerDto customer, WaterBillingMobileAppAPiContext db) =>
         {
             var affected = await db.Customer
                 .Where(model => model.CUSTNMBR == id)
                 .ExecuteUpdateAsync(setters => setters
-                  .SetProperty(m => m.CUSTNMBR, customer.CUSTNMBR)
+                  .SetProperty(m => m.CUSTNMBR, customer.CUSTMBR)
                   .SetProperty(m => m.CUSTNAME, customer.CUSTNAME)
                   .SetProperty(m => m.CUSTCLAS, customer.CUSTCLAS)
-                  .SetProperty(m => m.ADDRESS1, customer.ADDRESS1)
-                  .SetProperty(m => m.ADDRESS2, customer.ADDRESS2)
-                  .SetProperty(m => m.ADDRESS3, customer.ADDRESS3)
+                  .SetProperty(m => m.STATE, customer.STATE)
                   .SetProperty(m => m.ZIP, customer.ZIP)
 
                 );
