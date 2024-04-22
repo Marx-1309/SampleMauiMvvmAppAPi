@@ -386,6 +386,7 @@ public static class AllApiEndpoints
                     .SetProperty(m => m.CURRENT_READING, reading.CURRENT_READING)
                     .SetProperty(m => m.Comment, reading.Comment)
                     .SetProperty(m => m.METER_READER, reading.METER_READER)
+                    .SetProperty(m => m.ReadingDate, reading.ReadingDate)
 
                 );
 
@@ -393,6 +394,24 @@ public static class AllApiEndpoints
         })
      .WithName("UpdateReading").AllowAnonymous()
      .WithOpenApi();
+
+
+        group.MapPut("Image/{id}", async Task<Results<Ok, NotFound>> (ImageSyncDto reading, WaterBillingMobileAppAPiContext db) =>
+        {
+            var affected = await db.Reading
+                .Where(model => model.WaterReadingExportDataID == reading.WaterReadingExportDataId)
+                .ExecuteUpdateAsync(setters => setters
+                    .SetProperty(m => m.MeterImage, reading.MeterImage)
+
+                );
+
+            return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
+        })
+     .WithName("UpdateImage").AllowAnonymous()
+     .WithOpenApi();
+
+
+
 
 
         group.MapPost("/", async (Reading reading, WaterBillingMobileAppAPiContext db) =>

@@ -1,5 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using WaterBillingMobileAppAPi.Mappings.Dto_s;
+using System.Text.Json.Serialization;
 
 namespace WaterBillingMobileAppAPi.Models
 {
@@ -24,12 +26,15 @@ namespace WaterBillingMobileAppAPi.Models
         public System.Int64? RouteNumber { get; set; }
         public string? METER_READER { get; set; }
         public string? Comment { get; set; }
+        public string? ReadingDate { get; set; }
         public System.Int64? WaterReadingTypeID { get; set; }
+        public byte[]? MeterImage { get; set; }
 
 
         // Navigation property to the WaterReadingExport class
         [ForeignKey("WaterReadingExportID")]
         [InverseProperty("Readings")]
         public ReadingExport WaterReadingExport { get; set; }
+        //public object MeterImage { get; internal set; }
     }
 }
