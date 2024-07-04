@@ -12,7 +12,7 @@ namespace WaterBillingMobileAppAPi.Models
         public System.Int64 MonthID { get; set; }
         public System.Int64 Year { get; set; }
         public string? SALSTERR { get; set; }
-        public bool LastReadings { get;set; }
+        //public bool LastReadings { get;set; }
         public List<Reading>? Readings { get; set; }
 
     }

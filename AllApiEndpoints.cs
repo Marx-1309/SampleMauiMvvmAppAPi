@@ -385,6 +385,8 @@ public static class AllApiEndpoints
                 .ExecuteUpdateAsync(setters => setters
                     .SetProperty(m => m.CURRENT_READING, reading.CURRENT_READING)
                     .SetProperty(m => m.Comment, reading.Comment)
+                    .SetProperty(m => m.AREA, reading.AREA)
+                    .SetProperty(m => m.METER_NUMBER, reading.METER_NUMBER)
                     .SetProperty(m => m.METER_READER, reading.METER_READER)
                     .SetProperty(m => m.ReadingDate, reading.ReadingDate)
 
@@ -441,6 +443,61 @@ public static class AllApiEndpoints
             return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
         })
         .WithName("DeleteReading").AllowAnonymous()
+        .WithOpenApi();
+    }
+	public static void MapBillingLocationEndpoints (this IEndpointRouteBuilder routes)
+    {
+        var group = routes.MapGroup("/api/BillingLocation").WithTags(nameof(BillingLocation));
+
+        group.MapGet("/", async (WaterBillingMobileAppAPiContext db) =>
+        {
+            return await db.BillingLocation.ToListAsync();
+        })
+        .WithName("GetAllBillingLocations").AllowAnonymous()
+        .WithOpenApi();
+
+        group.MapGet("/{id}", async Task<Results<Ok<BillingLocation>, NotFound>> (int billinglocationid, WaterBillingMobileAppAPiContext db) =>
+        {
+            return await db.BillingLocation.AsNoTracking()
+                .FirstOrDefaultAsync(model => model.BillingLocationID == billinglocationid)
+                is BillingLocation model
+                    ? TypedResults.Ok(model)
+                    : TypedResults.NotFound();
+        })
+        .WithName("GetBillingLocationById").AllowAnonymous()
+        .WithOpenApi();
+
+        group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int billinglocationid, BillingLocation billingLocation, WaterBillingMobileAppAPiContext db) =>
+        {
+            var affected = await db.BillingLocation
+                .Where(model => model.BillingLocationID == billinglocationid)
+                .ExecuteUpdateAsync(setters => setters
+                  .SetProperty(m => m.BillingLocationID, billingLocation.BillingLocationID)
+                  .SetProperty(m => m.Location, billingLocation.Location)
+                  //.SetProperty(m => m.Township, billingLocation.Township)
+                  );
+            return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
+        })
+        .WithName("UpdateBillingLocation").AllowAnonymous()
+        .WithOpenApi();
+
+        group.MapPost("/", async (BillingLocation billingLocation, WaterBillingMobileAppAPiContext db) =>
+        {
+            db.BillingLocation.Add(billingLocation);
+            await db.SaveChangesAsync();
+            return TypedResults.Created($"/api/BillingLocation/{billingLocation.BillingLocationID}",billingLocation);
+        })
+        .WithName("CreateBillingLocation").AllowAnonymous()
+        .WithOpenApi();
+
+        group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int billinglocationid, WaterBillingMobileAppAPiContext db) =>
+        {
+            var affected = await db.BillingLocation
+                .Where(model => model.BillingLocationID == billinglocationid)
+                .ExecuteDeleteAsync();
+            return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
+        })
+        .WithName("DeleteBillingLocation").AllowAnonymous()
         .WithOpenApi();
     }
 }

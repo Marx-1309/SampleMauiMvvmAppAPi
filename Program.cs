@@ -146,6 +146,8 @@ app.MapPost("/login", async (LoginDto loginDto, UserManager<IdentityUser> _userM
 
 app.MapReadingEndpoints();
 
+app.MapBillingLocationEndpoints();
+
 
 app.Run();
 

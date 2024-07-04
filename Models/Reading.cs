@@ -27,7 +27,7 @@ namespace WaterBillingMobileAppAPi.Models
         public string? METER_READER { get; set; }
         public string? Comment { get; set; }
         public string? ReadingDate { get; set; }
-        public System.Int64? WaterReadingTypeID { get; set; }
+        //public System.Int64? WaterReadingTypeID { get; set; }
         public byte[]? MeterImage { get; set; }
 
 

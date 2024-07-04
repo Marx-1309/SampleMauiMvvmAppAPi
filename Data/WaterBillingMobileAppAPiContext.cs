@@ -95,5 +95,9 @@ namespace WaterBillingMobileAppAPi.Data
                     }
                 );
         }
+
+
+
+        public DbSet<WaterBillingMobileAppAPi.Models.BillingLocation> BillingLocation { get; set; } = default!;
     }
 }
