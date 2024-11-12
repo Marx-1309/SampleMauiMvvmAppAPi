@@ -29,7 +29,8 @@ namespace WaterBillingMobileAppAPi.Models
         public string? ReadingDate { get; set; }
         //public System.Int64? WaterReadingTypeID { get; set; }
         public byte[]? MeterImage { get; set; }
-
+        [JsonIgnore]
+        public bool? IsCityTab { get; set; }
 
         // Navigation property to the WaterReadingExport class
         [ForeignKey("WaterReadingExportID")]

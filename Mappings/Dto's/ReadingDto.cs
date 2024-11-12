@@ -22,7 +22,7 @@ namespace WaterBillingMobileAppAPi.Mappings.Dto_s
     public class UpdateReadingDto
 
     {
-        public int WaterReadingExportDataID { get; set; }
+        public Int64 WaterReadingExportDataID { get; set; }
         public decimal CURRENT_READING { get; set; }
         public string? AREA { get; set; }
         public string? METER_NUMBER { get; set; }
