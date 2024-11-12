@@ -4,9 +4,11 @@ using Microsoft.AspNetCore.OpenApi;
 using WaterBillingMobileAppAPi.Data;
 using WaterBillingMobileAppAPi.Models;
 using WaterBillingMobileAppAPi.Mappings.Dto_s;
+using Microsoft.AspNetCore.Authorization;
+using System.Linq;
 
 namespace WaterBillingMobileAppAPi;
-
+[Authorize]
 public static class AllApiEndpoints
 {
     public static void MapCustomerEndpoints(this IEndpointRouteBuilder routes)
@@ -360,14 +362,37 @@ public static class AllApiEndpoints
     {
         var group = routes.MapGroup("/api/Reading").WithTags(nameof(Reading));
 
-        group.MapGet("/", async (WaterBillingMobileAppAPiContext db) =>
+        group.MapGet("/", async (string? billingSite, WaterBillingMobileAppAPiContext db) =>
         {
-            return await db.Reading.ToListAsync();
+            if (string.IsNullOrEmpty(billingSite))
+            {
+                return await db.Reading.ToListAsync();
+            }
+            var ExportId = await db.ReadingExport.Where(r=>r.SALSTERR == billingSite).OrderByDescending(r=>r.WaterReadingExportID).Select(r=>r.WaterReadingExportID).FirstOrDefaultAsync();
+            var readings =  await db.Reading.Where(r=>r.WaterReadingExportID == ExportId).ToListAsync();
+            foreach (var reading in readings)
+            {
+                // Get all string properties and trim them
+                var stringProperties = reading.GetType()
+                                               .GetProperties()
+                                               .Where(p => p.PropertyType == typeof(string));
+
+                foreach (var property in stringProperties)
+                {
+                    var value = property.GetValue(reading) as string;
+                    if (value != null)
+                    {
+                        property.SetValue(reading, value.Trim());
+                    }
+                }
+            }
+
+            return readings;
         })
         .WithName("GetAllReadings").AllowAnonymous()
         .WithOpenApi();
 
-        group.MapGet("/{id}", async Task<Results<Ok<Reading>, NotFound>> (int id, WaterBillingMobileAppAPiContext db) =>
+        group.MapGet("/{id}", async Task<Results<Ok<Reading>, NotFound>> (int id,WaterBillingMobileAppAPiContext db) =>
         {
             return await db.Reading.AsNoTracking()
                 .FirstOrDefaultAsync(model => model.WaterReadingExportDataID == id)
