@@ -6,9 +6,15 @@ using WaterBillingMobileAppAPi.Models;
 using WaterBillingMobileAppAPi.Mappings.Dto_s;
 using Microsoft.AspNetCore.Authorization;
 using System.Linq;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
+using System.Text.RegularExpressions;
 
 namespace WaterBillingMobileAppAPi;
-[Authorize]
+
 public static class AllApiEndpoints
 {
     public static void MapCustomerEndpoints(this IEndpointRouteBuilder routes)
@@ -17,7 +23,26 @@ public static class AllApiEndpoints
 
         group.MapGet("/", async (WaterBillingMobileAppAPiContext db) =>
         {
-            return await db.Customer.ToListAsync();
+            var customers = await db.Customer.ToListAsync();
+
+            foreach (var customer in customers)
+            {
+                // Trim string properties
+                var stringProperties = customer.GetType()
+                                               .GetProperties()
+                                               .Where(p => p.PropertyType == typeof(string));
+
+                foreach (var property in stringProperties)
+                {
+                    var value = property.GetValue(customer) as string;
+                    if (value != null)
+                    {
+                        property.SetValue(customer, value.Trim());
+                    }
+                }
+            }
+
+            return customers;
         })
         .WithName("GetAllCustomers").AllowAnonymous()
         .WithOpenApi();
@@ -358,21 +383,46 @@ public static class AllApiEndpoints
         .WithName("DeleteUser")
         .WithOpenApi();
     }
+
     public static void MapReadingEndpoints(this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/Reading").WithTags(nameof(Reading));
 
+        // Handle both with and without billingSite
         group.MapGet("/", async (string? billingSite, WaterBillingMobileAppAPiContext db) =>
         {
-            if (string.IsNullOrEmpty(billingSite))
+            if (string.IsNullOrEmpty(billingSite) || billingSite.Trim() == "PRIVILEGED")
             {
-                return await db.Reading.ToListAsync();
+                var allReadings = await db.Reading.ToListAsync();
+                foreach (var reading in allReadings)
+                {
+                    // Trim string properties
+                    var stringProperties = reading.GetType()
+                                                   .GetProperties()
+                                                   .Where(p => p.PropertyType == typeof(string));
+
+                    foreach (var property in stringProperties)
+                    {
+                        var value = property.GetValue(reading) as string;
+                        if (value != null)
+                        {
+                            property.SetValue(reading, value.Trim());
+                        }
+                    }
+                }
+                return allReadings;
             }
-            var ExportId = await db.ReadingExport.Where(r=>r.SALSTERR == billingSite).OrderByDescending(r=>r.WaterReadingExportID).Select(r=>r.WaterReadingExportID).FirstOrDefaultAsync();
-            var readings =  await db.Reading.Where(r=>r.WaterReadingExportID == ExportId).ToListAsync();
+
+            var ExportId = await db.ReadingExport
+                                   .Where(r => r.SALSTERR == billingSite)
+                                   .OrderByDescending(r => r.WaterReadingExportID)
+                                   .Select(r => r.WaterReadingExportID)
+                                   .FirstOrDefaultAsync();
+            var readings = await db.Reading.Where(r => r.WaterReadingExportID == ExportId).ToListAsync();
+
             foreach (var reading in readings)
             {
-                // Get all string properties and trim them
+                // Trim string properties
                 var stringProperties = reading.GetType()
                                                .GetProperties()
                                                .Where(p => p.PropertyType == typeof(string));
@@ -389,19 +439,19 @@ public static class AllApiEndpoints
 
             return readings;
         })
-        .WithName("GetAllReadings").AllowAnonymous()
-        .WithOpenApi();
+        .WithName("GetAllReadings").AllowAnonymous().WithOpenApi();
 
-        group.MapGet("/{id}", async Task<Results<Ok<Reading>, NotFound>> (int id,WaterBillingMobileAppAPiContext db) =>
-        {
-            return await db.Reading.AsNoTracking()
-                .FirstOrDefaultAsync(model => model.WaterReadingExportDataID == id)
-                is Reading model
-                    ? TypedResults.Ok(model)
-                    : TypedResults.NotFound();
-        })
-        .WithName("GetReadingById").AllowAnonymous()
-        .WithOpenApi();
+
+        //group.MapGet("/{id}", async Task<Results<Ok<Reading>, NotFound>> (int id, WaterBillingMobileAppAPiContext db) =>
+        //{
+        //    return await db.Reading.AsNoTracking()
+        //        .FirstOrDefaultAsync(model => model.WaterReadingExportDataID == id)
+        //        is Reading model
+        //            ? TypedResults.Ok(model)
+        //            : TypedResults.NotFound();
+        //})
+        //.WithName("GetReadingById").AllowAnonymous()
+        //.WithOpenApi();
 
         group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (UpdateReadingDto reading, WaterBillingMobileAppAPiContext db) =>
         {
@@ -470,7 +520,7 @@ public static class AllApiEndpoints
         .WithName("DeleteReading").AllowAnonymous()
         .WithOpenApi();
     }
-	public static void MapBillingLocationEndpoints (this IEndpointRouteBuilder routes)
+    public static void MapBillingLocationEndpoints (this IEndpointRouteBuilder routes)
     {
         var group = routes.MapGroup("/api/BillingLocation").WithTags(nameof(BillingLocation));
 
@@ -525,4 +575,89 @@ public static class AllApiEndpoints
         .WithName("DeleteBillingLocation").AllowAnonymous()
         .WithOpenApi();
     }
+
+    public static void MapLoginEndpoints(this IEndpointRouteBuilder routes)
+    {
+        var group = routes.MapGroup("/api/login").WithTags(nameof(LoginDto));
+
+        group.MapPost("/", async (LoginDto loginDto, UserManager<IdentityUser> _userManager, WaterBillingMobileAppAPiContext db) =>
+        {
+            var user = await _userManager.FindByNameAsync(loginDto.Username);
+
+            if (user is null)
+            {
+                return Results.Unauthorized();
+            }
+
+            var isValidPassword = await _userManager.CheckPasswordAsync(user, loginDto.Password);
+
+            if (!isValidPassword)
+            {
+                return Results.Unauthorized();
+            }
+
+            string UserId = user.Id;
+            var site = await db.AspNetUserSites.Where(r => r.UserId == UserId).Select(r => r.Site).FirstOrDefaultAsync();
+
+            // Generate an access token
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes("YourSecretEncodingKey"));
+            var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
+
+            var roles = await _userManager.GetRolesAsync(user);
+            var claims = await _userManager.GetClaimsAsync(user);
+            var tokenClaims = new List<Claim>
+                {
+                    new Claim(JwtRegisteredClaimNames.Sub, user.Id),
+                    new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                    new Claim(JwtRegisteredClaimNames.Email, user.Email),
+                    new Claim("email_confirmed", user.EmailConfirmed.ToString()),
+                    new Claim("UserSite",site)
+                }.Union(claims)
+            .Union(roles.Select(role => new Claim(ClaimTypes.Role, role)));
+
+        var securityToken = new JwtSecurityToken(
+            issuer: "WaterBillingMobileAppAPi",
+            audience: "MauiApp",
+            claims: tokenClaims,
+            expires: DateTime.UtcNow.AddMinutes(Convert.ToInt32(1000000)),
+            signingCredentials: credentials
+            );
+
+            var accessToken = new JwtSecurityTokenHandler().WriteToken(securityToken);
+
+            var response = new AuthResponseDto
+            {
+                UserId = user.Id,
+                Username = user.UserName,
+                Token = accessToken
+            };
+
+            return Results.Ok(response);
+        })
+            //.WithName("CreateLogin").AllowAnonymous()
+            .AllowAnonymous();
+
+    }
+
+    private static void TrimStringProperties(Customer model)
+    {
+        var stringProperties = model.GetType()
+                                    .GetProperties()
+                                    .Where(p => p.PropertyType == typeof(string));
+
+        foreach (var property in stringProperties)
+        {
+            var value = property.GetValue(model) as string;
+            if (value != null)
+            {
+                property.SetValue(model, value.Trim());
+            }
+        }
+    }
+    //public static async Task<string> GetUserBillingSiteAsync(string userId, WaterBillingMobileAppAPiContext db)
+    //{
+    //    var site = db.AspNetUserSites.Where(r => r.UserId == userId).Select(r => r.Site).FirstOrDefaultAsync();
+    //    return site;
+
+    //}
 }
