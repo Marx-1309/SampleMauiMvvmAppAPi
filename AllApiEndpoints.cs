@@ -24,9 +24,14 @@ public static class AllApiEndpoints
         group.MapGet("/", async (WaterBillingMobileAppAPiContext db) =>
         {
             var customers = await db.Customer.ToListAsync();
+            var ds = await db.BS_DebtorSMS.ToListAsync();
 
             foreach (var customer in customers)
             {
+               var phone = ds.Where(r => r.CUSTNMBR?.Trim() == customer.CUSTNMBR?.Trim())
+              .Select(r => r.CellPhoneNumber1)
+              .FirstOrDefault();
+              customer.PHONE1 = phone ?? 0;
                 // Trim string properties
                 var stringProperties = customer.GetType()
                                                .GetProperties()
@@ -394,8 +399,10 @@ public static class AllApiEndpoints
             if (string.IsNullOrEmpty(billingSite) || billingSite.Trim() == "PRIVILEGED")
             {
                 var allReadings = await db.Reading.ToListAsync();
+                
                 foreach (var reading in allReadings)
                 {
+                    
                     // Trim string properties
                     var stringProperties = reading.GetType()
                                                    .GetProperties()

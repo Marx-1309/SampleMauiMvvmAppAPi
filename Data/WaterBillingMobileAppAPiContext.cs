@@ -28,13 +28,13 @@ namespace WaterBillingMobileAppAPi.Data
 
         public DbSet<WaterBillingMobileAppAPi.Models.Reading> Reading { get; set; } = default!;
 
-
         public DbSet<WaterBillingMobileAppAPi.Models.RM00303> RM00303 { get; set; } = default!;
 
         public DbSet<WaterBillingMobileAppAPi.Models.Month> Month { get; set; } = default!;
 
         public DbSet<WaterBillingMobileAppAPi.Models.Device> Device { get; set; } = default!;
         public DbSet<WaterBillingMobileAppAPi.Models.AspNetUserSites> AspNetUserSites { get; set; } = default!;
+        public DbSet<WaterBillingMobileAppAPi.Models.BS_DebtorSMS> BS_DebtorSMS { get; set; } = default!;
 
 
 

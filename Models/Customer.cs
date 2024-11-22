@@ -12,6 +12,8 @@ namespace WaterBillingMobileAppAPi.Models
         [Key]
         public string? CUSTNMBR { get; set; }
         public string? CUSTNAME { get; set; }
+        [NotMapped]
+        public System.Int64? PHONE1 { get; set; } = 0;
         public string? CUSTCLAS { get; set; }
         public string? STATE { get; set; }
         public string? ZIP { get; set; }
